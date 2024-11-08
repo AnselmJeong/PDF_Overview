@@ -1,0 +1,21 @@
+[project]
+name = "pdf_overview"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "ipykernel>=6.29.5",
+    "langchain>=0.0.27",
+    "langchain-core>=0.3.15",
+    "langchain-ollama>=0.2.0",
+    "langchain-openai>=0.2.6",
+    "langchain-text-splitters>=0.3.2",
+    "ipywidgets>=8.1.5",
+    "jupyterlab-widgets>=3.0.13",
+    "ollama>=0.3.3",
+    "toml>=0.10.2",
+    "python-dotenv>=1.0.1",
+    "pymupdf4llm>=0.0.17",
+    "pymupdf>=1.24.13",
+]

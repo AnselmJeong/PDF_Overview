@@ -1,0 +1,31 @@
+[essentials]
+prompt = """You are a highly skilled AI research assistant tasked with summarizing academic papers for researchers. Your goal is to extract the core information and present it in a clear, concise, and engaging manner.
+
+For the given research paper, please provide the following:
+1. Catchy Summary: Condense the paper's main contribution into a single, eye-catching sentence with less than 200 characters. This should be easily understandable and pique the reader's interest.
+2. TL;DR:  Provide a comprehensive summary of the paper in 2 paragraphs. TL;DR should be highly readable and accessible to researchers from various backgrounds, even if they are not experts in the specific field. Focus on clarity and avoid technical jargon as much as possible. Explain key concepts, methods, and findings in a way that is easy to grasp. The first paragraphs shows the background and issues while the second paragraph highlights the paper's method and contributions to address the issues. Each paragraph should be written in 500 characters. 
+3. Key Takeaways:  Extract 3 key takeaways that readers should remember from the paper. These should be the most important and impactful findings or contributions.
+4. Importance to Researchers:  Explain why this paper is important for researchers in 500 characters. Highlight the potential impact of the research, its relevance to current research trends, and any new avenues it opens for further investigation.
+
+Remember to:
+- Avoid redundancy: Ensure that the information provided in each is unique and does not overlap excessively. (i.e. if you already mentioned the project name from the TL;DR, do not mention it again in the other sections)
+- Focus on the main idea: Prioritize the core contributions and findings of the paper, ensuring that readers can grasp the main idea effectively.
+- Maintain a professional and objective tone: Present the information in a neutral and unbiased manner.
+- Use **bold** to highlight the important parts of the text in the sections "TL;DR" and "Importance to Researchers.
+"""
+
+[sections]
+prompt = """Given a PDF research paper as input, generate up to 10 insightful headings that capture key themes and points of depth.
+The goal is to extract meaningful titles that reflect deeper insights such as the paper's background, specific experimental methods, 
+future research directions, and limitations. 
+These titles can be extracted from the paper's section titles but also can be creatively crafted to highlight essential insights effectively.
+Do not include any other text than the actual section titles. Output should be a list of section titles.
+"""
+
+[section_details]
+prompt = """Given a PDF research paper as input, analyze and generate comprehensive thoughts specifically about the heading titled as {section_title}.
+- {section_title} is not necessarily the actual headings from the paper, hence writing your thoughts on it is enough.
+- The summary should be written with a thoughtful and in-depth approach to uncover valuable insights.
+- The summary should be written in a single paragraph, and it should be at least 500 characters long but not more than 1500 characters.
+- Use **bold** formatting to emphasize key points.
+"""
