@@ -2,30 +2,87 @@
 prompt = """You are a highly skilled AI research assistant tasked with summarizing academic papers for researchers. Your goal is to extract the core information and present it in a clear, concise, and engaging manner.
 
 For the given research paper, please provide the following:
-1. Catchy Summary: Condense the paper's main contribution into a single, eye-catching sentence with less than 200 characters. This should be easily understandable and pique the reader's interest.
-2. TL;DR:  Provide a comprehensive summary of the paper in 2 paragraphs. TL;DR should be highly readable and accessible to researchers from various backgrounds, even if they are not experts in the specific field. Focus on clarity and avoid technical jargon as much as possible. Explain key concepts, methods, and findings in a way that is easy to grasp. The first paragraphs shows the background and issues while the second paragraph highlights the paper's method and contributions to address the issues. Each paragraph should be written in 500 characters. 
-3. Key Takeaways:  Extract 3 key takeaways that readers should remember from the paper. These should be the most important and impactful findings or contributions.
-4. Importance to Researchers:  Explain why this paper is important for researchers in 500 characters. Highlight the potential impact of the research, its relevance to current research trends, and any new avenues it opens for further investigation.
+1. TL;DR:  Provide a comprehensive summary of the paper in 2 paragraphs. TL;DR should be highly readable and accessible to researchers from various backgrounds, even if they are not experts in the specific field. Focus on clarity and avoid technical jargon as much as possible. Explain key concepts, methods, and findings in a way that is easy to grasp. The first paragraphs shows the background and issues while the second paragraph highlights the paper's method and contributions to address the issues. Each paragraph should be written in 500 characters. 
+2. Key Takeaways:  Extract 3 key takeaways that readers should remember from the paper. These should be the most important and impactful findings or contributions.
+3. Importance to Researchers:  Explain why this paper is important for researchers in 500 characters. Highlight the potential impact of the research, its relevance to current research trends, and any new avenues it opens for further investigation.
+4. Table of Contents (TOC): Apart from title, authors, affiliations, and abstract, the main text of the paper is divided into several level 1 or 2 sections, with each section's first line containing a representative heading. TOC should represent the hierarchical structure of these level 1 and 2 headings. TOC should not contain Title of the paper, Abstract, References, Footnotes, Funding, Ethical statement, Acknowledgements and other following sections. Also, TOC should only contain these headers. Add markdown formatting exactly as the below example.
 
 Remember to:
 - Avoid redundancy: Ensure that the information provided in each is unique and does not overlap excessively. (i.e. if you already mentioned the project name from the TL;DR, do not mention it again in the other sections)
 - Focus on the main idea: Prioritize the core contributions and findings of the paper, ensuring that readers can grasp the main idea effectively.
-- Maintain a professional and objective tone: Present the information in a neutral and unbiased manner.
 - Use **bold** to highlight the important parts of the text in the sections "TL;DR" and "Importance to Researchers.
+- Output should be a STRICTLY JSON object with the keys "tldr", "key_takeaways", "importance_to_researchers", and "toc" as the following examle:
+
+Example of the JSON output:
+
+<"tldr": "The paper introduces a novel approach to improve the accuracy of the prediction of the protein-protein interaction networks.",
+"key_takeaways": ["Network embedding is a powerful technique for predicting the protein-protein interaction networks.", "Calculating the similarity between nodes in the network is a crucial step for network embedding.", "The proposed method achieves high accuracy in predicting the protein-protein interaction networks."],
+"importance_to_researchers": "This paper is important for researchers in the field of network science and protein-protein interaction networks.",
+"toc": "**1. Introduction**\n**2. Epidemiology & Pathophysiology of Restraint**\n**3. Classifications of Restraints in Mental Health**\n- Physical Restraints\n- Chemical Restraints\n- Psychological Restraint\n**4. Conclusion**>
 """
 
-[sections]
-prompt = """Given a PDF research paper as input, generate up to 10 insightful headings that capture key themes and points of depth.
-The goal is to extract meaningful titles that reflect deeper insights such as the paper's background, specific experimental methods, 
-future research directions, and limitations. 
-These titles can be extracted from the paper's section titles but also can be creatively crafted to highlight essential insights effectively.
-Do not include any other text than the actual section titles. Output should be a list of section titles.
+[section_summary]
+prompt = """The provided text is composed of several sections structured by the following table of contents.
+     {toc}
+     Analyze and generate faithful summaries of each and every section contained in the table of contents.
+     - If a level 1 section is divided into multiple level 2 sections, write only the heading of level 1 section, and then write the summaries of each level 2 section in order.
+     - Never omit any level 2 section contained in the table of contents in the summarizing process.
+     - The summary should be a thoughtful and in-depth account of the section to uncover valuable insights.
+     - Pay attention to the author's novel arguments. If possible, include the author's rationale to defend their arguments.
+     - The summary for each section should be written in a single paragraph, avoid bullet points, and it should be at least 1500 characters long but not more than 2000 characters.
+     - Add markdown formatting exactly as the below example.
+     - Use **bold** formatting to emphasize key points.
+
+     - Example of the output:
+
+     ### 1. Introduction
+     Restraint is a common practice in mental health settings, but its use can lead to **serious physical and psychological consequences**. This paper aims to explore the various types of restraints used in mental health settings, their effects on patients, and the potential consequences of restraint use.
+
+     ### 2. Epidemiology & Pathophysiology of Restraint
+     **The prevalence of restraint use in mental health settings is high**, with a significant number of patients experiencing restraint in the United States. Restraint can lead to **serious physical and psychological consequences**, including asphyxia, thrombosis, and psychological trauma.
+
+     ### 3. Classifications of Restraints in Mental Health
+         #### 3.1. Physical Restraints
+         Restraints used in mental health settings can be **physical, chemical, psychological, or seclusion**. Physical restraints are the most common type of restraint used in mental health settings, and they can be used to control patients who are experiencing agitation or aggression.
+         
+         #### 3.2. Chemical Restraints
+         Chemical restraints are the second most common type of restraint used in mental health settings, and they can be used to control patients who are experiencing agitation or aggression.
+
+         ### 3.3. Psychological Restraint
+         ...
+
+    ### 4. ...
+    ### 5. ...
 """
 
-[section_details]
-prompt = """Given a PDF research paper as input, analyze and generate comprehensive thoughts specifically about the heading titled as {section_title}.
-- {section_title} is not necessarily the actual headings from the paper, hence writing your thoughts on it is enough.
-- The summary should be written with a thoughtful and in-depth approach to uncover valuable insights.
-- The summary should be written in a single paragraph, and it should be at least 500 characters long but not more than 1500 characters.
-- Use **bold** formatting to emphasize key points.
+[toc]
+prompt = """Create a table of contents from the provided text.
+     - Usually, the text contains title, authors, affiliations, and abstract.
+     - After that, the text is divided into several level 1 or 2 sections, with each section's first line containing a level 1 or 2 heading.
+     - The table of contents should represent the hierarchical structure of the level 1 and 2 headings.
+     - The table of contents should not contain Title of the paper, Abstract, References, Footnotes, Funding, Ethical statement, Acknowledgements and other following sections.
+
+     - Example of a table of contents:
+    
+    ## Table of Contents
+     **1. Introduction**
+     **2. Epidemiology & Pathophysiology of Restraint**
+     **3. Classifications of Restraints in Mental Health**
+         3.1. Physical Restraints
+         3.2. Chemical Restraints
+         3.3. Psychological Restraint
+         3.4. Seclusion
+     **4. Recognizing and De-escalating the Violent Patient**
+         4.1. Phase 1: Anxiety
+         4.2. Phase 2: Defensiveness
+         4.3. Phase 3: Physical Aggression
+     **5. Possible Consequences of Restraints in Psychiatry**
+         5.1. Asphyxia
+         5.2. Thrombosis
+         5.3. Catecholamine Rush
+         5.4. Rhabdomyolysis
+         5.5. Psychological Effects
+
+     **6. Conclusion** 
 """
+
