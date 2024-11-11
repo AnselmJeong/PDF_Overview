@@ -107,8 +107,6 @@ def get_overview(pdf_path: str, toml_path: str, write_to_file: bool = True) -> s
     all_output += "### Abstract\n\n"
     for paragraph in metadata.get("abstract", "").split("\n"):
         all_output += f">{paragraph}\n\n"
-    all_output += "### Table of Contents\n\n"
-    all_output += f"{toc}\n\n"
     all_output += "- - -\n\n"
     all_output += f"{section_summary}\n\n"
     if write_to_file:
